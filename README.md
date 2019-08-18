@@ -5,7 +5,5 @@ projeto sockets - damas chinesas
 ## estrutura
 
 - open-screen (join/host)
-  - lobby-chat
-  - game-count
-  - game-screen
-    - in-game-chat
+- lobby-chat
+- game-match

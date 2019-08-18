@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Damas chinesas</title>
+  </head>
+  <body>
+    <h1>Open Screen</h1>
+    <button id="nav">Join/Host</button>
+    <script type="module">
+      const { ipcRenderer } = require("electron");
+      ipcRenderer.on("bar", (event, args) => {
+        console.log({ event, args });
+      });
+      ipcRenderer.send("foo", "ping");
+      console.log("if you start me up i'll never stop, never stop");
+      document
+        .getElementById("nav")
+        .addEventListener("click", _ =>
+          ipcRenderer.send("join-host" /* payload */)
+        );
+    </script>
+  </body>
+</html>
