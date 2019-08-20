@@ -1,23 +1,55 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Damas chinesas</title>
-  </head>
-  <body>
-    <h1>Open Screen</h1>
-    <button id="nav">Join/Host</button>
-    <script type="module">
-      const { ipcRenderer } = require("electron");
-      ipcRenderer.on("bar", (event, args) => {
-        console.log({ event, args });
-      });
-      ipcRenderer.send("foo", "ping");
-      console.log("if you start me up i'll never stop, never stop");
-      document
-        .getElementById("nav")
-        .addEventListener("click", _ =>
-          ipcRenderer.send("join-host" /* payload */)
-        );
-    </script>
-  </body>
+	<head>
+		<title>Damas chinesas</title>
+		<script type="module">
+			window.Vue = require("vue/dist/vue");
+		</script>
+	</head>
+	<body>
+		<h1>Bem vindo!</h1>
+		<form id="form" @submit.prevent.stop="doSubmit()">
+			<label for="nickname">Apelido</label>
+			<input id="nickname" v-model="payload.nickname" required />
+			<br />
+			<label for="mode">Modo</label>
+			<select id="mode" v-model="payload.mode" required>
+				<option v-for="m in modes" :key="m">{{ m }}</option>
+			</select>
+			<br />
+			<label v-if="payload.mode == 'join'" for="ip">IP</label>
+			<input
+				v-if="payload.mode == 'join'"
+				id="ip"
+				v-model="payload.ip"
+				required
+			/>
+			<br />
+			<button type="submit">Ir para o lobby</button>
+		</form>
+		<script type="module">
+			console.log("if you start me up i'll never stop, never stop");
+			const { ipcRenderer } = require("electron");
+			new Vue({
+				el: "#form",
+				data: {
+					payload: {
+						nickname: "",
+						mode: "host",
+						ip: "127.0.0.1",
+					},
+					modes: ["host", "join"],
+				},
+				methods: {
+					doSubmit() {
+						ipcRenderer.send("join-host", this.payload);
+					},
+				},
+			});
+			ipcRenderer.send("foo", "ping");
+			ipcRenderer.on("bar", (event, args) => {
+				console.log({ event, args });
+			});
+		</script>
+	</body>
 </html>
