@@ -28,7 +28,6 @@
 			<button type="submit">Ir para o lobby</button>
 		</form>
 		<script type="module">
-			console.log("if you start me up i'll never stop, never stop");
 			const { ipcRenderer } = require("electron");
 			new Vue({
 				el: "#form",
@@ -46,10 +45,7 @@
 					},
 				},
 			});
-			ipcRenderer.send("foo", "ping");
-			ipcRenderer.on("bar", (event, args) => {
-				console.log({ event, args });
-			});
+			console.log("if you start me up i'll never stop, never stop");
 		</script>
 	</body>
 </html>

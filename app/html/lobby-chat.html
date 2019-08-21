@@ -1,13 +1,39 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Damas chinesas</title>
-  </head>
-  <body>
-    <h1>Lobby Chat</h1>
-    <button onclick="navLobby">Foo</button>
-    <script type="module">
-     
-    </script>
-  </body>
+	<head>
+		<title>Damas chinesas</title>
+		<script type="module">
+			window.Vue = require("vue/dist/vue");
+		</script>
+	</head>
+	<body>
+		<h1>Lobby Chat</h1>
+		<div id="app">
+			<div id="chat">
+				<div v-for="m in mensagens" :key="m.id"></div>
+			</div>
+			<div id="jogadores">
+				<div v-for="j in jogadores" :key="j.id"></div>
+			</div>
+		</div>
+		<script type="module">
+			const { ipcRenderer } = require("electron");
+			new Vue({
+				el: "#app",
+				data: {
+					mensagens: [],
+					jogadores: [],
+				},
+				mounted() {
+					ipcRenderer.send("get-myself");
+					ipcRenderer.send("get-list-players");
+					ipcRenderer.send("get-list-chat-messages");
+					ipcRenderer.on("myself", (e, data) => {});
+					ipcRenderer.on("list-players", (e, data) => {});
+					ipcRenderer.on("list-chat-messages", (e, data) => {});
+				},
+				methods: {},
+			});
+		</script>
+	</body>
 </html>
