@@ -1,19 +1,16 @@
-import { ipcMain } from "electron";
+export const myself = {};
+export const players = [];
+export const messages = [];
+export const games = [];
+
 export const join = async ({ ip, nickname }) => {
-	return "done!";
+  myself.nickname = nickname;
+  myself.id = nickname + "#" + new Date().getTime();
+  myself.status = "idle";
+  players.push(myself);
+  return "done!";
 };
 
-ipcMain.on("get-list-chat-messages", e => {
-	e.sender.send("myself");
-	console.log(e);
-});
-
-ipcMain.on("get-list-players", e => {
-	e.sender.send("list-players");
-	console.log(e);
-});
-
-ipcMain.on("get-myself", e => {
-	e.sender.send("list-chat-messages");
-	console.log(e);
-});
+export const newMessage = async msg => {
+  return await messages.push(msg);
+};
