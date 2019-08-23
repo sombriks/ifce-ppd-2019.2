@@ -6,4 +6,6 @@ projeto sockets - damas chinesas
 
 - open-screen (join/host)
 - lobby-chat
+  - challenges
+  - players
 - game-match
