@@ -1,16 +1,48 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Damas chinesas</title>
+	<head>
+		<title>Damas chinesas</title>
 		<script type="module">
 			window.Vue = require("vue/dist/vue");
 		</script>
-  </head>
-  <body>
-    <h1>Partida X1 vs X2</h1>
-    <script type="module">
+	</head>
+	<body>
+		<div id="app">
+			<h1 v-if="game"
+				>Partida {{ game.challenge.p1.nickname }} vs
+				{{ game.challenge.p2.nickname }}</h1
+			>
+		</div>
+		<script type="module">
 			const { ipcRenderer } = require("electron");
-     
-    </script>
-  </body>
+			new Vue({
+				el: "#app",
+				data: {
+					game: null,
+					myself: null,
+				},
+				created() {
+					ipcRenderer.send("get-myself");
+					ipcRenderer.send("get-my-game");
+					ipcRenderer.on("myself", (e, myself) => {
+						this.myself = myself;
+					});
+					ipcRenderer.on("my-game", (e, game) => {
+						this.game = game;
+					});
+				},
+				methods: {
+					isMyTurn() {
+						const [p1, p2] = this.game.challenge;
+						const p = game.turn % 2 == 0 ? p1 : p2;
+					},
+					doMove() {
+						const move = { p: this.myself, move: "TODO" }; // TODO implement game move
+						this.game.moves.push(move);
+						ipcRenderer.send("send-game-move", this.game);
+					},
+				},
+			});
+		</script>
+	</body>
 </html>

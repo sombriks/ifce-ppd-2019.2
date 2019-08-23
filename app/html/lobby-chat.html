@@ -123,7 +123,7 @@
             const challenger =
               challenge.p1.id != this.myself.id ? challenge.p1 : challenge.p2;
             if (
-              confirm(`Jogador ${challenger.nickname} Te desafiou. Aceitar?`)
+              confirm(`Jogador ${challenger.nickname} te desafiou. Aceitar?`)
             ) {
               e.sender.send("accept-challenge", challenge);
             } else e.sender.send("decline-challenge", challenge);
