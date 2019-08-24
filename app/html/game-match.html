@@ -38,7 +38,7 @@
   <body>
     <div id="app" class="container">
       <svg class="item">
-        <path v-for="p in board" :key="p.id" :d="p.d" :style="p.style" @click="sel(p)"/>
+        <path v-for="(p,i) in board" :key="p.id" :d="p.d" :style="p.style" @click="sel(p,i)"/>
       </svg>
     </div>
     <script type="module">
@@ -67,9 +67,9 @@
             const p = game.turn % 2 == 0 ? p1 : p2;
             return p.id == this.myself.id;
           },
-          sel(p) {
-            // if (this.m.find(p)) this.m = [];
-            console.log(p)
+          sel(p,i) {
+            // helper pra saber quem são os próximos
+            console.log(`path [${p.id}], index [${i}], near [${p.near.join(",")}]`);
           },
           doMove() {
             const move = { p: this.myself, move: this.m }; // TODO implement game move

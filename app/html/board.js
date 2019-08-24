@@ -2,6 +2,7 @@ const style =
   "fill:#e3dcec;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1";
 const mkCell = (id, d) => ({ id, d, style, near: [] });
 const mkBoard = _ => {
+  // monta a lista
   const board = [];
   board.push(
     mkCell(
@@ -729,5 +730,10 @@ const mkBoard = _ => {
       "m 168.46384,298.08133 c 1.79184,7.17226 -4.05025,18.82745 4.79792,21.85587 7.11277,5.16087 14.21379,9.05579 21.20829,1.5219 10.40451,-2.19805 6.84076,-12.36823 7.22223,-20.28676 -0.7553,-6.62838 -12.55129,-10.42632 -17.86126,-12.11531 -5.12235,3.00812 -10.24475,6.01621 -15.36718,9.0243 z"
     )
   );
+  // relaciona os próximos. no svg temos visualmente um perto do outro mas na 
+  // prática a lista de casas tá embaralhada.
+  const mapper = {}
+  board.map(e => mapper[e.id]=e);
+  mapper["path1"].near.push(board[1], mapper["path2"]);
   return board;
 };
