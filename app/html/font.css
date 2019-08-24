@@ -1,0 +1,20 @@
+@font-face {
+  font-family: "Press Start 2P";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(PressStart2P-Regular.ttf);
+}
+
+html,
+body,
+p,
+div,
+span,
+input,
+select,
+h1,
+h2,
+h3 {
+  font-family: "Press Start 2P", cursive;
+}

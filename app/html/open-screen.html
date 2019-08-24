@@ -1,60 +1,73 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Damas chinesas</title>
-		<script type="module">
-			window.Vue = require("vue/dist/vue");
-		</script>
-		<style>
-			#form{
-				position:absolute;
-				top:30%;
-				bottom:30%;
-				left:30%;
-				right:30%;
-			}
-		</style>
-	</head>
-	<body>
-		<h1>Bem vindo!</h1>
-		<form id="form" @submit.prevent.stop="doSubmit">
-			<label for="nickname">Apelido</label>
-			<input id="nickname" v-model="payload.nickname" required />
-			<br />
-			<label for="mode">Modo</label>
-			<select id="mode" v-model="payload.mode" required>
-				<option v-for="m in modes" :key="m">{{ m }}</option>
-			</select>
-			<br />
-			<label v-if="payload.mode == 'join'" for="ip">IP</label>
-			<input
-				v-if="payload.mode == 'join'"
-				id="ip"
-				v-model="payload.ip"
-				required
-			/>
-			<br />
-			<button type="submit">Ir para o lobby</button>
-		</form>
-		<script type="module">
-			const { ipcRenderer } = require("electron");
-			new Vue({
-				el: "#form",
-				data: {
-					payload: {
-						nickname: "",
-						mode: "host",
-						ip: "127.0.0.1",
-					},
-					modes: ["host", "join"],
-				},
-				methods: {
-					doSubmit() {
-						ipcRenderer.send("join-host", this.payload);
-					},
-				},
-			});
-			console.log("if you start me up i'll never stop, never stop");
-		</script>
-	</body>
+  <head>
+    <title>Damas chinesas</title>
+    <script type="module">
+      window.Vue = require("vue/dist/vue");
+    </script>
+    <link rel="stylesheet" href="font.css" />
+    <link rel="stylesheet" href="nes.css" />
+    <style>
+      #form {
+        position: absolute;
+        top: 30%;
+        bottom: 30%;
+        left: 30%;
+        right: 30%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Bem vindo!</h1>
+    <form id="form" @submit.prevent.stop="doSubmit">
+      <div class="nes-field">
+        <label for="nickname">Apelido</label>
+        <input
+          id="nickname"
+          class="nes-input"
+          v-model="payload.nickname"
+          required
+        />
+      </div>
+      <br />
+      <div class="nes-field">
+        <label for="mode">Modo</label>
+        <div class="nes-select is-success">
+          <select id="mode" v-model="payload.mode" required>
+            <option v-for="m in modes" :key="m">{{ m }}</option>
+          </select>
+        </div>
+      </div>
+      <br />
+      <label v-if="payload.mode == 'join'" for="ip">IP</label>
+      <input
+        v-if="payload.mode == 'join'"
+        id="ip"
+        v-model="payload.ip"
+        required
+      />
+      <br />
+      <button class="nes-btn is-primary" type="submit">Ir para o lobby</button>
+    </form>
+    <script type="module">
+      const { ipcRenderer } = require("electron");
+      new Vue({
+        el: "#form",
+        data: {
+          payload: {
+            nickname: "",
+            mode: "host",
+            ip: "127.0.0.1"
+          },
+          modes: ["host", "join"]
+        },
+        methods: {
+          doSubmit() {
+            ipcRenderer.send("join-host", this.payload);
+          }
+        }
+      });
+      console.log("if you start me up i'll never stop, never stop");
+    </script>
+  </body>
 </html>

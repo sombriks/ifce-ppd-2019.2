@@ -5,6 +5,8 @@
     <script type="module">
       window.Vue = require("vue/dist/vue");
     </script>
+    <link rel="stylesheet" href="font.css" />
+    <link rel="stylesheet" href="nes.css" />
     <style>
       #container {
         position: absolute;
@@ -50,6 +52,9 @@
       #send {
         border: 1px solid black;
       }
+      .w70 {
+        width:90%;
+      }
     </style>
   </head>
   <body>
@@ -59,15 +64,20 @@
       <div id="app">
         <div id="send">
           <form @submit.prevent.stop="sendMessage">
-            <textarea v-model="newMsg.text" maxlength="255"></textarea><br />
-            <button type="submit">Enviar</button>
+            <textarea
+              class="nes-textarea"
+              v-model="newMsg.text"
+              maxlength="255"
+            ></textarea
+            ><br />
+            <button class="nes-btn is-primary" type="submit">Enviar</button>
           </form>
         </div>
         <div id="chat">
-          <div v-for="m in revMensagens" :key="m.id">
-            <i>{{ m.stamp }} {{ m.player.nickname }}</i> <br />
-            <pre>{{ m.text }}</pre>
-          </div>
+          <p class="nes-balloon w70" v-for="m in revMensagens" :key="m.id">
+            <i>{{ m.stamp }} {{ m.player.nickname }}</i>
+            {{ m.text }}
+          </p>
         </div>
         <div id="players">
           <div v-for="j in players" :key="j.id" @click="challenge(j)">

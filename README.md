@@ -9,3 +9,23 @@ projeto sockets - damas chinesas
   - challenges
   - players
 - game-match
+
+## pré-requisitos
+
+- node 10 e o nmp que vier
+- internet
+
+## teccnologias
+
+- electron/node
+- nes.css
+- vue
+
+## como executar o projeto
+
+```bash
+git clone https://github.com/sombriks/ifce-ppd-2019.2.git
+cd ifce-ppd-2019.2
+npm install
+npm run dev
+```
