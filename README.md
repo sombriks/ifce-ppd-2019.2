@@ -15,7 +15,7 @@ projeto sockets - damas chinesas
 - node 10 e o nmp que vier
 - internet
 
-## teccnologias
+## tecnologias
 
 - electron/node
 - nes.css

@@ -6,7 +6,7 @@
       window.Vue = require("vue/dist/vue");
     </script>
     <link rel="stylesheet" href="font.css" />
-    <link rel="stylesheet" href="nes.css"/>
+    <link rel="stylesheet" href="nes.css" />
     <script type="text/javascript" src="board.js"></script>
     <style>
       #app {
@@ -30,15 +30,21 @@
       .item {
         flex: 0 0 auto;
         margin: 5px;
-        width:500px;
-        height:500px;
+        width: 500px;
+        height: 500px;
       }
     </style>
   </head>
   <body>
     <div id="app" class="container">
       <svg class="item">
-        <path v-for="(p,i) in board" :key="p.id" :d="p.d" :style="p.style" @click="sel(p,i)"/>
+        <path
+          v-for="(p,i) in board"
+          :key="p.id"
+          :d="p.d"
+          :style="p.style(p.glow)"
+          @click="sel(p,i)"
+        />
       </svg>
     </div>
     <script type="module">
@@ -67,9 +73,14 @@
             const p = game.turn % 2 == 0 ? p1 : p2;
             return p.id == this.myself.id;
           },
-          sel(p,i) {
+          sel(p, i) {
             // helper pra saber quem são os próximos
-            console.log(`path [${p.id}], index [${i}], near [${p.near.join(",")}]`);
+            p.glow = !p.glow;
+            console.log(
+              `path [${p.id}], index [${i}], near [${p.near
+                .map(e => e.id)
+                .join(",")}]`
+            );
           },
           doMove() {
             const move = { p: this.myself, move: this.m }; // TODO implement game move

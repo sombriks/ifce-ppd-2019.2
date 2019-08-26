@@ -39,13 +39,10 @@
         </div>
       </div>
       <br />
-      <label v-if="payload.mode == 'join'" for="ip">IP</label>
-      <input
-        v-if="payload.mode == 'join'"
-        id="ip"
-        v-model="payload.ip"
-        required
-      />
+      <div v-if="payload.mode == 'join'" class="nes-field">
+        <label for="ip">IP</label>
+        <input class="nes-input" id="ip" v-model="payload.ip" required />
+      </div>
       <br />
       <button class="nes-btn is-primary" type="submit">Ir para o lobby</button>
     </form>
