@@ -77,9 +77,10 @@
             // helper pra saber quem são os próximos
             p.glow = !p.glow;
             console.log(
-              `path [${p.id}], index [${i}], near [${p.near
-                .map(e => e.id)
-                .join(",")}]`
+              `m["${p.id}"].near.push();`
+            //   `path [${p.id}], index [${i}], near [${p.near
+            //     .map(e => e.id)
+            //     .join(",")}]`
             );
           },
           doMove() {
