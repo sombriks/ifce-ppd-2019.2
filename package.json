@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "electron index.js"
+    "dev": "cp node_modules/nes.css/css/nes.css app/html/nes.css electron index.js"
   },
   "repository": {
     "type": "git",
