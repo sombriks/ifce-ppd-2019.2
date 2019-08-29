@@ -1,177 +1,196 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Damas chinesas</title>
-    <script type="module">
-      window.Vue = require("vue/dist/vue");
-    </script>
-    <link rel="stylesheet" href="font.css" />
-    <link rel="stylesheet" href="nes.css" />
-    <style>
-      #container {
-        position: absolute;
-        top: 0px;
-        bottom: 0px;
-        left: 0px;
-        right: 0px;
-      }
-      #app {
-        display: grid;
-        grid-gap: 10px;
-        padding: 10px;
-        min-height: 480px;
-        max-height: 768px;
-      }
-      #send {
-        grid-row: 1;
-        grid-column: 1 / span 4;
-      }
-      #chat {
-        grid-row: 2 / span 2;
-        grid-column: 1 / span 3;
-        min-height: 400px;
-        max-height: 700px;
-        overflow: scroll;
-      }
-      #challenges {
-        grid-row: 2;
-        grid-column: 4;
-      }
-      #players {
-        grid-row: 3;
-        grid-column: 4;
-      }
-      #send > form > textarea {
-        width: 95%;
-        min-height: 60%;
-      }
-      #app,
-      #chat,
-      #players,
-      #challenges,
-      #send {
-        border: 1px solid black;
-      }
-      .w70 {
-        width:90%;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="container">
-      <h1>Lobby Chat</h1>
-      <small>aperte no nome de jogador para desafiar para uma partida</small>
-      <div id="app">
-        <div id="send">
-          <form @submit.prevent.stop="sendMessage">
-            <textarea
-              class="nes-textarea"
-              v-model="newMsg.text"
-              maxlength="255"
-            ></textarea
-            ><br />
-            <button class="nes-btn is-primary" type="submit">Enviar</button>
-          </form>
-        </div>
-        <div id="chat">
-          <p class="nes-balloon w70" v-for="m in revMensagens" :key="m.id">
-            <i>{{ m.stamp }} {{ m.player.nickname }}</i>
-            {{ m.text }}
-          </p>
-        </div>
-        <div id="players">
-          <div v-for="j in players" :key="j.id" @click="challenge(j)">
-            <span>{{ j.nickname }}</span>
-            <i v-if="j.id == myself.id">(you)</i>
-          </div>
-        </div>
-        <div id="challenges">
-          <div v-for="c in challenges" :key="c.id">
-            <span>{{ c.p1.nickname }} vs {{ c.p2.nickname }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <script type="module">
-      const { ipcRenderer } = require("electron");
-      new Vue({
-        el: "#app",
-        data: {
-          myself: null,
-          mensagens: [],
-          players: [],
-          challenges: [],
-          newMsg: {
-            text: "",
-            player: null,
-            stamp: null
-          }
-        },
-        computed: {
-          revMensagens() {
-            return this.mensagens.reverse();
-          }
-        },
-        mounted() {
-          ipcRenderer.send("get-myself");
-          ipcRenderer.send("get-list-players");
-          ipcRenderer.send("get-list-challenges");
-          ipcRenderer.send("get-list-chat-messages");
-          ipcRenderer.on("myself", (e, myself) => {
-            this.myself = myself;
-          });
-          ipcRenderer.on("list-players", (e, players) => {
-            this.players = players;
-          });
-          ipcRenderer.on("list-challenges", (e, challenges) => {
-            this.challenges = challenges;
-          });
-          ipcRenderer.on("list-chat-messages", (e, messages) => {
-            this.mensagens = messages;
-          });
-          ipcRenderer.on("new-challenge", (e, challenge) => {
-            const challenger =
-              challenge.p1.id != this.myself.id ? challenge.p1 : challenge.p2;
-            if (
-              confirm(`Jogador ${challenger.nickname} te desafiou. Aceitar?`)
-            ) {
-              e.sender.send("accept-challenge", challenge);
-            } else e.sender.send("decline-challenge", challenge);
-          });
-        },
-        methods: {
-          sendMessage() {
-            this.newMsg.player = this.myself;
-            ipcRenderer.send("new-message", this.newMsg);
-            this.newMsg = {
-              text: "",
-              player: null
-            };
-          },
-          challenge(player) {
-            if (
-              this.challenges.filter(e => {
-                if (e.p1 && e.p1.id == player.id) return true;
-                else if (e.p2 && e.p2.id == player.id) return true;
-                else return false;
-              }).length > 0
-            )
-              return alert(`O jogador ${player.nickname} já foi desafiado`);
-            if (
-              confirm(
-                `Deseja realmente desafiar ${player.nickname} para uma partida?`
-              )
-            ) {
-              ipcRenderer.send("send-challenge", {
-                id:
-                  this.myself.id + "#" + player.id + "#" + new Date().getTime(),
-                p1: this.myself,
-                p2: player
-              });
-            }
-          }
-        }
-      });
-    </script>
-  </body>
+	<head>
+		<title>Damas chinesas</title>
+		<script type="module">
+			window.Vue = require("vue/dist/vue");
+		</script>
+		<link rel="stylesheet" href="font.css" />
+		<link rel="stylesheet" href="nes.css" />
+		<style>
+			#container {
+				position: absolute;
+				top: 0px;
+				bottom: 0px;
+				left: 0px;
+				right: 0px;
+			}
+			#app {
+				display: flex;
+				flex-direction: row;
+				padding: 10px;
+			}
+			#box1 {
+				flex-grow: 1;
+			}
+			#box1,
+			#box2 {
+				display: flex;
+				flex-direction: column;
+			}
+			#chat {
+				flex-grow: 1;
+				display: flex;
+				flex-direction: column;
+				overflow: scroll;
+			}
+			#challenges {
+				flex-grow: 1;
+			}
+			#players {
+				flex-grow: 1;
+			}
+			#send > form > textarea {
+				width: 95%;
+				min-height: 60%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="container">
+			<h1>Lobby Chat</h1>
+			<small
+				>aperte no nome de jogador para desafiar para uma partida</small
+			>
+			<div id="app">
+				<div id="box1">
+					<div id="send">
+						<form @submit.prevent.stop="sendMessage">
+							<textarea
+								class="nes-textarea"
+								v-model="newMsg.text"
+								maxlength="255"
+							></textarea
+							><br />
+							<button class="nes-btn is-primary" type="submit"
+								>Enviar</button
+							>
+						</form>
+					</div>
+					<div id="chat">
+						<p
+							class="nes-balloon w70"
+							v-for="m in revMensagens"
+							:key="m.id"
+						>
+							<i>{{ m.stamp }} {{ m.player.nickname }}</i>
+							{{ m.text }}
+						</p>
+					</div>
+				</div>
+				<div id="box2">
+					<div id="players">
+						<div
+							v-for="j in players"
+							:key="j.id"
+							@click="challenge(j)"
+						>
+							<span>{{ j.nickname }}</span>
+							<i v-if="j.id == myself.id">(you)</i>
+						</div>
+					</div>
+					<div id="challenges">
+						<div v-for="c in challenges" :key="c.id">
+							<span
+								>{{ c.p1.nickname }} vs
+								{{ c.p2.nickname }}</span
+							>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="module">
+			const { ipcRenderer } = require("electron");
+			new Vue({
+				el: "#app",
+				data: {
+					myself: null,
+					mensagens: [],
+					players: [],
+					challenges: [],
+					newMsg: {
+						text: "",
+						player: null,
+						stamp: null,
+					},
+				},
+				computed: {
+					revMensagens() {
+						return this.mensagens.reverse();
+					},
+				},
+				mounted() {
+					ipcRenderer.send("get-myself");
+					ipcRenderer.send("get-list-players");
+					ipcRenderer.send("get-list-challenges");
+					ipcRenderer.send("get-list-chat-messages");
+					ipcRenderer.on("myself", (e, myself) => {
+						this.myself = myself;
+					});
+					ipcRenderer.on("list-players", (e, players) => {
+						this.players = players;
+					});
+					ipcRenderer.on("list-challenges", (e, challenges) => {
+						this.challenges = challenges;
+					});
+					ipcRenderer.on("list-chat-messages", (e, messages) => {
+						this.mensagens = messages;
+					});
+					ipcRenderer.on("new-challenge", (e, challenge) => {
+						const challenger =
+							challenge.p1.id != this.myself.id
+								? challenge.p1
+								: challenge.p2;
+						if (
+							confirm(
+								`Jogador ${challenger.nickname} te desafiou. Aceitar?`,
+							)
+						) {
+							e.sender.send("accept-challenge", challenge);
+						} else e.sender.send("decline-challenge", challenge);
+					});
+				},
+				methods: {
+					sendMessage() {
+						this.newMsg.player = this.myself;
+						ipcRenderer.send("new-message", this.newMsg);
+						this.newMsg = {
+							text: "",
+							player: null,
+						};
+					},
+					challenge(player) {
+						if (
+							this.challenges.filter(e => {
+								if (e.p1 && e.p1.id == player.id) return true;
+								else if (e.p2 && e.p2.id == player.id)
+									return true;
+								else return false;
+							}).length > 0
+						)
+							return alert(
+								`O jogador ${player.nickname} já foi desafiado`,
+							);
+						if (
+							confirm(
+								`Deseja realmente desafiar ${player.nickname} para uma partida?`,
+							)
+						) {
+							ipcRenderer.send("send-challenge", {
+								id:
+									this.myself.id +
+									"#" +
+									player.id +
+									"#" +
+									new Date().getTime(),
+								p1: this.myself,
+								p2: player,
+							});
+						}
+					},
+				},
+			});
+		</script>
+	</body>
 </html>
