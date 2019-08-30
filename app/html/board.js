@@ -1,8 +1,25 @@
-const style = glow =>
-  `fill:${
-    glow ? "#ffdcec" : "#e3dcec"
-  };fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1`;
-const mkCell = (id, d) => ({ id, d, style, near: [], glow: false });
+const style = (glow, state) => {
+  const stl = 
+    "fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1";
+  let fill = "#e3dcec";
+  if(glow){
+    switch(state){
+      case "free": 
+        fill = "#efdfef";
+      break;
+    }
+  }else{
+    switch(state){
+      case "free": 
+        fill = "#e3dcec";
+      break;
+      
+    }
+  }
+  return `fill:${fill};` + stl;
+};
+
+const mkCell = (id, d) => ({ id, d, style, near: [], glow: false, state:"free" });
 const mkBoard = _ => {
   // monta a lista
   const board = [];

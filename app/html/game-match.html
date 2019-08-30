@@ -39,11 +39,11 @@
     <div id="app" class="container">
       <svg class="item">
         <path
-          v-for="(p,i) in board"
+          v-for="p in board"
           :key="p.id"
           :d="p.d"
-          :style="p.style(p.glow)"
-          @click="sel(p,i)"
+          :style="p.style(p.glow,p.state)"
+          @click="sel(p)"
         />
       </svg>
     </div>
@@ -73,15 +73,8 @@
             const p = game.turn % 2 == 0 ? p1 : p2;
             return p.id == this.myself.id;
           },
-          sel(p, i) {
-            // helper pra saber quem são os próximos
+          sel(p) {
             p.glow = !p.glow;
-            console.log(
-              `m["${p.id}"],`
-            //   `path [${p.id}], index [${i}], near [${p.near
-            //     .map(e => e.id)
-            //     .join(",")}]`
-            );
           },
           doMove() {
             const move = { p: this.myself, move: this.m }; // TODO implement game move
