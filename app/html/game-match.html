@@ -55,7 +55,7 @@
           game: null,
           myself: null,
           board: mkBoard(),
-          m: []
+          m: new Set()
         },
         created() {
           ipcRenderer.send("get-myself");
@@ -66,6 +66,10 @@
           ipcRenderer.on("my-game", (e, game) => {
             this.game = game;
           });
+          ipcRenderer.on("game-move", (e, game) => {
+            console.log("game move!");
+            console.log(game);
+          });
         },
         methods: {
           isMyTurn() {
@@ -74,14 +78,36 @@
             return p.id == this.myself.id;
           },
           sel(p) {
+            if (!this.canSel(p)) return;
+            if (this.m.size == 1 && !this.canMoveTo(p)) {
+              console.log("movimento ilegal");
+              return;
+            }
             p.glow = !p.glow;
+            if (p.glow) {
+              this.m.add(p);
+            } else {
+              this.m.delete(p);
+            }
+            console.log(this.m);
+            if (this.m.size == 2) this.doMove();
+          },
+          canSel(p) {
+            return true;
+          },
+          canMoveTo(p) {
+            return true;
           },
           doMove() {
-            const move = { p: this.myself, move: this.m }; // TODO implement game move
-            console.log(move);
-            this.m = [];
+            const move = {
+              p: this.myself,
+              move: this.m,
+              time: new Date().toJSON()
+            };
             this.game.moves.push(move);
             ipcRenderer.send("send-game-move", this.game);
+            this.m.forEach(e => (e.glow = false));
+            this.m = new Set();
           }
         }
       });
