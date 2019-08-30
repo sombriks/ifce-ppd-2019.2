@@ -101,7 +101,7 @@
           doMove() {
             const move = {
               p: this.myself,
-              move: this.m,
+              move: Array.from(this.m),
               time: new Date().toJSON()
             };
             this.game.moves.push(move);
