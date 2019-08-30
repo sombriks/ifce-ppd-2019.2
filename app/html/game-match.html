@@ -7,7 +7,6 @@
     </script>
     <link rel="stylesheet" href="font.css" />
     <link rel="stylesheet" href="nes.css" />
-    <script type="text/javascript" src="board.js"></script>
     <style>
       #app {
         position: absolute;
@@ -37,12 +36,12 @@
   </head>
   <body>
     <div id="app" class="container">
-      <svg class="item">
+      <svg class="item" v-if="game">
         <path
-          v-for="p in board"
+          v-for="p in game.board"
           :key="p.id"
           :d="p.d"
-          :style="p.style(p.glow,p.state)"
+          :style="mkStyle(p)"
           @click="sel(p)"
         />
       </svg>
@@ -54,7 +53,6 @@
         data: {
           game: null,
           myself: null,
-          board: mkBoard(),
           m: new Set()
         },
         created() {
@@ -108,6 +106,25 @@
             ipcRenderer.send("send-game-move", this.game);
             this.m.forEach(e => (e.glow = false));
             this.m = new Set();
+          },
+          mkStyle(p) {
+            const stl =
+              "fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1";
+            let fill = "#e3dcec";
+            if (p.glow) {
+              switch (p.state) {
+                case "free":
+                  fill = "#efdfef";
+                  break;
+              }
+            } else {
+              switch (p.state) {
+                case "free":
+                  fill = "#e3dcec";
+                  break;
+              }
+            }
+            return `fill:${fill};` + stl;
           }
         }
       });

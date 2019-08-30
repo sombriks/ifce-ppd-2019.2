@@ -1,26 +1,36 @@
-const style = (glow, state) => {
-  const stl = 
-    "fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1";
-  let fill = "#e3dcec";
-  if(glow){
-    switch(state){
-      case "free": 
-        fill = "#efdfef";
-      break;
-    }
-  }else{
-    switch(state){
-      case "free": 
-        fill = "#e3dcec";
-      break;
-      
-    }
-  }
-  return `fill:${fill};` + stl;
-};
+// const style = (glow, state) => {
+//   const stl =
+//     "fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1";
+//   let fill = "#e3dcec";
+//   if(glow){
+//     switch(state){
+//       case "free":
+//         fill = "#efdfef";
+//       break;
+//     }
+//   }else{
+//     switch(state){
+//       case "free":
+//         fill = "#e3dcec";
+//       break;
 
-const mkCell = (id, d) => ({ id, d, style, near: [], glow: false, state:"free" });
-const mkBoard = _ => {
+//     }
+//   }
+//   return `fill:${fill};` + stl;
+// };
+
+const style =
+  "fill:#e3dcec;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1";
+
+const mkCell = (id, d) => ({
+  id,
+  d,
+  style,
+  near: [],
+  glow: false,
+  state: "free"
+});
+export const mkBoard = _ => {
   // monta a lista
   const board = [];
   board.push(
@@ -753,126 +763,126 @@ const mkBoard = _ => {
   // prática a lista de casas tá embaralhada.
   const m = {};
   board.map(e => (m[e.id] = e));
-  m["p1"].near.push(m["p2"], m["p3"]);
-  m["p2"].near.push(m["p1"], m["p3"], m["p4"], m["p5"]);
-  m["p3"].near.push(m["p1"], m["p2"], m["p5"], m["p6"]);
-  m["p4"].near.push(m["p2"], m["p5"], m["p8"], m["p7"]);
-  m["p5"].near.push(m["p2"], m["p3"], m["p6"], m["p9"], m["p8"], m["p4"]);
-  m["p6"].near.push(m["p3"], m["p5"], m["p9"], m["p10"]);
-  m["p7"].near.push(m["p4"], m["p8"], m["p16"], m["p15"]);
-  m["p8"].near.push(m["p4"], m["p5"], m["p9"], m["p17"], m["p16"], m["p7"]);
-  m["p9"].near.push(m["p5"], m["p6"], m["p10"], m["p18"], m["p17"], m["p8"]);
-  m["p10"].near.push(m["p6"], m["p19"], m["p18"], m["p9"]);
-  m["p11"].near.push(m["p12"], m["p24"]);
-  m["p12"].near.push(m["p13"], m["p25"], m["p24"], m["p11"]);
-  m["p13"].near.push(m["p14"], m["p26"], m["p25"], m["p12"]);
-  m["p14"].near.push(m["p15"], m["p27"], m["p26"], m["p13"]);
-  m["p15"].near.push(m["p7"], m["p16"], m["p28"], m["p27"], m["p14"]);
-  m["p16"].near.push(m["p7"], m["p8"], m["p17"], m["p29"], m["p28"], m["p15"]);
-  m["p17"].near.push(m["p8"], m["p9"], m["p18"], m["p30"], m["p29"], m["p16"]);
-  m["p18"].near.push(m["p9"], m["p10"], m["p19"], m["p31"], m["p30"], m["p17"]);
-  m["p19"].near.push(m["p10"], m["p20"], m["p32"], m["p31"], m["p18"]);
-  m["p20"].near.push(m["p21"], m["p33"], m["p32"], m["p19"]);
-  m["p21"].near.push(m["p22"], m["p34"], m["p33"], m["p20"]);
-  m["p22"].near.push(m["p23"], m["p35"], m["p34"], m["p21"]);
-  m["p23"].near.push(m["p35"], m["p22"]);
-  m["p24"].near.push(m["p11"], m["p12"], m["p25"], m["p36"]);
-  m["p25"].near.push(m["p12"], m["p13"], m["p26"], m["p37"], m["p36"], m["p24"]);
-  m["p26"].near.push(m["p13"], m["p14"], m["p27"], m["p38"], m["p37"], m["p25"]);
-  m["p27"].near.push(m["p14"], m["p15"], m["p28"], m["p39"], m["p38"], m["p26"]);
-  m["p28"].near.push(m["p15"], m["p16"], m["p29"], m["p40"], m["p39"], m["p27"]);
-  m["p29"].near.push(m["p16"], m["p17"], m["p30"], m["p41"], m["p40"], m["p28"]);
-  m["p30"].near.push(m["p17"], m["p18"], m["p31"], m["p42"], m["p41"], m["p29"]);
-  m["p31"].near.push(m["p18"], m["p19"], m["p32"], m["p43"], m["p42"], m["p30"]);
-  m["p32"].near.push(m["p19"], m["p20"], m["p33"], m["p44"], m["p43"], m["p31"]);
-  m["p33"].near.push(m["p20"], m["p21"], m["p34"], m["p45"], m["p44"], m["p32"]);
-  m["p34"].near.push(m["p21"], m["p22"], m["p35"], m["p46"], m["p45"], m["p33"]);
-  m["p35"].near.push(m["p22"], m["p23"], m["p46"], m["p34"]);
-  m["p36"].near.push(m["p24"], m["p25"], m["p37"], m["p47"]);
-  m["p37"].near.push(m["p25"], m["p26"], m["p38"], m["p48"], m["p47"], m["p36"]);
-  m["p38"].near.push(m["p26"], m["p27"], m["p39"], m["p49"], m["p48"], m["p37"]);
-  m["p39"].near.push(m["p27"], m["p28"], m["p40"], m["p50"], m["p49"], m["p38"]);
-  m["p40"].near.push(m["p28"], m["p29"], m["p41"], m["p51"], m["p50"], m["p39"]);
-  m["p41"].near.push(m["p29"], m["p30"], m["p42"], m["p52"], m["p51"], m["p40"]);
-  m["p42"].near.push(m["p30"], m["p31"], m["p43"], m["p53"], m["p52"], m["p41"]);
-  m["p43"].near.push(m["p31"], m["p32"], m["p44"], m["p54"], m["p53"], m["p42"]);
-  m["p44"].near.push(m["p32"], m["p33"], m["p45"], m["p55"], m["p54"], m["p43"]);
-  m["p45"].near.push(m["p33"], m["p34"], m["p46"], m["p56"], m["p55"], m["p44"]);
-  m["p46"].near.push(m["p34"], m["p35"], m["p56"], m["p45"]);
-  m["p47"].near.push(m["p36"], m["p37"], m["p48"], m["p57"]);
-  m["p48"].near.push(m["p37"], m["p38"], m["p49"], m["p58"], m["p57"], m["p47"]);
-  m["p49"].near.push(m["p38"], m["p39"], m["p50"], m["p59"], m["p58"], m["p48"]);
-  m["p50"].near.push(m["p39"], m["p40"], m["p51"], m["p60"], m["p59"], m["p49"]);
-  m["p51"].near.push(m["p40"], m["p41"], m["p52"], m["p61"], m["p60"], m["p50"]);
-  m["p52"].near.push(m["p41"], m["p42"], m["p53"], m["p62"], m["p61"], m["p51"]);
-  m["p53"].near.push(m["p42"], m["p43"], m["p54"], m["p63"], m["p62"], m["p52"]);
-  m["p54"].near.push(m["p43"], m["p44"], m["p55"], m["p64"], m["p63"], m["p53"]);
-  m["p55"].near.push(m["p44"], m["p45"], m["p56"], m["p65"], m["p64"], m["p54"]);
-  m["p56"].near.push(m["p45"], m["p46"], m["p65"], m["p55"]);
-  m["p57"].near.push(m["p47"], m["p48"], m["p58"], m["p67"], m["p66"]);
-  m["p58"].near.push(m["p48"], m["p49"], m["p59"], m["p68"], m["p67"], m["p57"]);
-  m["p59"].near.push(m["p49"], m["p50"], m["p60"], m["p69"], m["p68"], m["p58"]);
-  m["p60"].near.push(m["p50"], m["p51"], m["p61"], m["p70"], m["p69"], m["p59"]);
-  m["p61"].near.push(m["p51"], m["p52"], m["p62"], m["p71"], m["p70"], m["p60"]);
-  m["p62"].near.push(m["p52"], m["p53"], m["p63"], m["p72"], m["p71"], m["p61"]);
-  m["p63"].near.push(m["p53"], m["p54"], m["p64"], m["p73"], m["p72"], m["p62"]);
-  m["p64"].near.push(m["p54"], m["p55"], m["p65"], m["p74"], m["p73"], m["p63"]);
-  m["p65"].near.push(m["p55"], m["p56"], m["p75"], m["p74"], m["p64"]);
-  m["p66"].near.push(m["p57"], m["p67"], m["p77"], m["p76"]);
-  m["p67"].near.push(m["p57"], m["p58"], m["p68"], m["p78"], m["p77"], m["p66"]);
-  m["p68"].near.push(m["p58"], m["p59"], m["p69"], m["p79"], m["p78"], m["p67"]);
-  m["p69"].near.push(m["p59"], m["p60"], m["p70"], m["p80"], m["p79"], m["p68"]);
-  m["p70"].near.push(m["p60"], m["p61"], m["p71"], m["p81"], m["p80"], m["p69"]);
-  m["p71"].near.push(m["p61"], m["p62"], m["p72"], m["p82"], m["p81"], m["p70"]);
-  m["p72"].near.push(m["p62"], m["p63"], m["p73"], m["p83"], m["p82"], m["p71"]);
-  m["p73"].near.push(m["p63"], m["p64"], m["p74"], m["p84"], m["p83"], m["p72"]);
-  m["p74"].near.push(m["p64"], m["p65"], m["p75"], m["p85"], m["p84"], m["p73"]);
-  m["p75"].near.push(m["p65"], m["p86"], m["p85"], m["p74"]);
-  m["p76"].near.push(m["p66"], m["p77"], m["p88"], m["p87"]);
-  m["p77"].near.push(m["p66"], m["p67"], m["p78"], m["p89"], m["p88"], m["p76"]);
-  m["p78"].near.push(m["p67"], m["p68"], m["p79"], m["p90"], m["p89"], m["p77"]);
-  m["p79"].near.push(m["p68"], m["p69"], m["p80"], m["p91"], m["p90"], m["p78"]);
-  m["p80"].near.push(m["p69"], m["p70"], m["p81"], m["p92"], m["p91"], m["p79"]);
-  m["p81"].near.push(m["p70"], m["p71"], m["p82"], m["p93"], m["p92"], m["p80"]);
-  m["p82"].near.push(m["p71"], m["p72"], m["p83"], m["p94"], m["p93"], m["p81"]);
-  m["p83"].near.push(m["p72"], m["p73"], m["p84"], m["p95"], m["p94"], m["p82"]);
-  m["p84"].near.push(m["p73"], m["p74"], m["p85"], m["p96"], m["p95"], m["p83"]);
-  m["p85"].near.push(m["p74"], m["p75"], m["p86"], m["p97"], m["p96"], m["p84"]);
-  m["p86"].near.push(m["p75"], m["p98"], m["p97"], m["p85"]);
-  m["p87"].near.push(m["p76"], m["p88"], m["p100"], m["p99"]);
-  m["p88"].near.push(m["p76"], m["p77"], m["p89"], m["p101"], m["p100"], m["p87"]);
-  m["p89"].near.push(m["p77"], m["p78"], m["p90"], m["p102"], m["p101"], m["p88"]);
-  m["p90"].near.push(m["p78"], m["p79"], m["p91"], m["p103"], m["p102"], m["p89"]);
-  m["p91"].near.push(m["p79"], m["p80"], m["p92"], m["p104"], m["p103"], m["p90"]);
-  m["p92"].near.push(m["p80"], m["p81"], m["p93"], m["p105"], m["p104"], m["p91"]);
-  m["p93"].near.push(m["p81"], m["p82"], m["p94"], m["p106"], m["p105"], m["p92"]);
-  m["p94"].near.push(m["p82"], m["p83"], m["p95"], m["p107"], m["p106"], m["p93"]);
-  m["p95"].near.push(m["p83"], m["p84"], m["p96"], m["p108"], m["p107"], m["p94"]);
-  m["p96"].near.push(m["p84"], m["p85"], m["p97"], m["p109"], m["p108"], m["p95"]);
-  m["p97"].near.push(m["p85"], m["p86"], m["p98"], m["p110"], m["p109"], m["p96"]);
-  m["p98"].near.push(m["p86"], m["p111"], m["p110"], m["p97"]);
-  m["p99"].near.push(m["p87"], m["p100"]);
-  m["p100"].near.push(m["p87"], m["p88"], m["p101"], m["p99"]);
-  m["p101"].near.push(m["p88"], m["p89"], m["p102"], m["p100"]);
-  m["p102"].near.push(m["p89"], m["p90"], m["p103"], m["p101"]);
-  m["p103"].near.push(m["p90"], m["p91"], m["p104"], m["p112"], m["p102"]);
-  m["p104"].near.push(m["p91"], m["p92"], m["p105"], m["p113"], m["p112"], m["p103"]);
-  m["p105"].near.push(m["p92"], m["p93"], m["p106"], m["p114"], m["p113"], m["p104"]);
-  m["p106"].near.push(m["p93"], m["p94"], m["p107"], m["p115"], m["p114"], m["p105"]);
-  m["p107"].near.push(m["p94"], m["p95"], m["p108"], m["p115"], m["p106"]);
-  m["p108"].near.push(m["p95"], m["p96"], m["p109"], m["p107"]);
-  m["p109"].near.push(m["p96"], m["p97"], m["p110"], m["p108"]);
-  m["p110"].near.push(m["p97"], m["p98"], m["p111"], m["p109"]);
-  m["p111"].near.push(m["p98"], m["p110"]);
-  m["p112"].near.push(m["p103"], m["p104"], m["p113"], m["p116"]);
-  m["p113"].near.push(m["p104"], m["p105"], m["p114"], m["p117"], m["p116"], m["p112"]);
-  m["p114"].near.push(m["p105"], m["p106"], m["p115"], m["p118"], m["p117"], m["p113"]);
-  m["p115"].near.push(m["p106"], m["p107"], m["p118"], m["p114"]);
-  m["p116"].near.push(m["p112"], m["p113"], m["p117"], m["p119"]);
-  m["p117"].near.push(m["p113"], m["p114"], m["p118"], m["p120"], m["p119"], m["p116"]);
-  m["p118"].near.push(m["p114"], m["p115"], m["p120"], m["p117"]);
-  m["p119"].near.push(m["p116"], m["p117"], m["p120"], m["p121"]);
-  m["p120"].near.push(m["p117"], m["p118"], m["p121"], m["p119"]);
-  m["p121"].near.push(m["p119"], m["p120"]);
+  m["p1"].near.push("p2", "p3");
+  m["p2"].near.push("p1", "p3", "p4", "p5");
+  m["p3"].near.push("p1", "p2", "p5", "p6");
+  m["p4"].near.push("p2", "p5", "p8", "p7");
+  m["p5"].near.push("p2", "p3", "p6", "p9", "p8", "p4");
+  m["p6"].near.push("p3", "p5", "p9", "p10");
+  m["p7"].near.push("p4", "p8", "p16", "p15");
+  m["p8"].near.push("p4", "p5", "p9", "p17", "p16", "p7");
+  m["p9"].near.push("p5", "p6", "p10", "p18", "p17", "p8");
+  m["p10"].near.push("p6", "p19", "p18", "p9");
+  m["p11"].near.push("p12", "p24");
+  m["p12"].near.push("p13", "p25", "p24", "p11");
+  m["p13"].near.push("p14", "p26", "p25", "p12");
+  m["p14"].near.push("p15", "p27", "p26", "p13");
+  m["p15"].near.push("p7", "p16", "p28", "p27", "p14");
+  m["p16"].near.push("p7", "p8", "p17", "p29", "p28", "p15");
+  m["p17"].near.push("p8", "p9", "p18", "p30", "p29", "p16");
+  m["p18"].near.push("p9", "p10", "p19", "p31", "p30", "p17");
+  m["p19"].near.push("p10", "p20", "p32", "p31", "p18");
+  m["p20"].near.push("p21", "p33", "p32", "p19");
+  m["p21"].near.push("p22", "p34", "p33", "p20");
+  m["p22"].near.push("p23", "p35", "p34", "p21");
+  m["p23"].near.push("p35", "p22");
+  m["p24"].near.push("p11", "p12", "p25", "p36");
+  m["p25"].near.push("p12", "p13", "p26", "p37", "p36", "p24");
+  m["p26"].near.push("p13", "p14", "p27", "p38", "p37", "p25");
+  m["p27"].near.push("p14", "p15", "p28", "p39", "p38", "p26");
+  m["p28"].near.push("p15", "p16", "p29", "p40", "p39", "p27");
+  m["p29"].near.push("p16", "p17", "p30", "p41", "p40", "p28");
+  m["p30"].near.push("p17", "p18", "p31", "p42", "p41", "p29");
+  m["p31"].near.push("p18", "p19", "p32", "p43", "p42", "p30");
+  m["p32"].near.push("p19", "p20", "p33", "p44", "p43", "p31");
+  m["p33"].near.push("p20", "p21", "p34", "p45", "p44", "p32");
+  m["p34"].near.push("p21", "p22", "p35", "p46", "p45", "p33");
+  m["p35"].near.push("p22", "p23", "p46", "p34");
+  m["p36"].near.push("p24", "p25", "p37", "p47");
+  m["p37"].near.push("p25", "p26", "p38", "p48", "p47", "p36");
+  m["p38"].near.push("p26", "p27", "p39", "p49", "p48", "p37");
+  m["p39"].near.push("p27", "p28", "p40", "p50", "p49", "p38");
+  m["p40"].near.push("p28", "p29", "p41", "p51", "p50", "p39");
+  m["p41"].near.push("p29", "p30", "p42", "p52", "p51", "p40");
+  m["p42"].near.push("p30", "p31", "p43", "p53", "p52", "p41");
+  m["p43"].near.push("p31", "p32", "p44", "p54", "p53", "p42");
+  m["p44"].near.push("p32", "p33", "p45", "p55", "p54", "p43");
+  m["p45"].near.push("p33", "p34", "p46", "p56", "p55", "p44");
+  m["p46"].near.push("p34", "p35", "p56", "p45");
+  m["p47"].near.push("p36", "p37", "p48", "p57");
+  m["p48"].near.push("p37", "p38", "p49", "p58", "p57", "p47");
+  m["p49"].near.push("p38", "p39", "p50", "p59", "p58", "p48");
+  m["p50"].near.push("p39", "p40", "p51", "p60", "p59", "p49");
+  m["p51"].near.push("p40", "p41", "p52", "p61", "p60", "p50");
+  m["p52"].near.push("p41", "p42", "p53", "p62", "p61", "p51");
+  m["p53"].near.push("p42", "p43", "p54", "p63", "p62", "p52");
+  m["p54"].near.push("p43", "p44", "p55", "p64", "p63", "p53");
+  m["p55"].near.push("p44", "p45", "p56", "p65", "p64", "p54");
+  m["p56"].near.push("p45", "p46", "p65", "p55");
+  m["p57"].near.push("p47", "p48", "p58", "p67", "p66");
+  m["p58"].near.push("p48", "p49", "p59", "p68", "p67", "p57");
+  m["p59"].near.push("p49", "p50", "p60", "p69", "p68", "p58");
+  m["p60"].near.push("p50", "p51", "p61", "p70", "p69", "p59");
+  m["p61"].near.push("p51", "p52", "p62", "p71", "p70", "p60");
+  m["p62"].near.push("p52", "p53", "p63", "p72", "p71", "p61");
+  m["p63"].near.push("p53", "p54", "p64", "p73", "p72", "p62");
+  m["p64"].near.push("p54", "p55", "p65", "p74", "p73", "p63");
+  m["p65"].near.push("p55", "p56", "p75", "p74", "p64");
+  m["p66"].near.push("p57", "p67", "p77", "p76");
+  m["p67"].near.push("p57", "p58", "p68", "p78", "p77", "p66");
+  m["p68"].near.push("p58", "p59", "p69", "p79", "p78", "p67");
+  m["p69"].near.push("p59", "p60", "p70", "p80", "p79", "p68");
+  m["p70"].near.push("p60", "p61", "p71", "p81", "p80", "p69");
+  m["p71"].near.push("p61", "p62", "p72", "p82", "p81", "p70");
+  m["p72"].near.push("p62", "p63", "p73", "p83", "p82", "p71");
+  m["p73"].near.push("p63", "p64", "p74", "p84", "p83", "p72");
+  m["p74"].near.push("p64", "p65", "p75", "p85", "p84", "p73");
+  m["p75"].near.push("p65", "p86", "p85", "p74");
+  m["p76"].near.push("p66", "p77", "p88", "p87");
+  m["p77"].near.push("p66", "p67", "p78", "p89", "p88", "p76");
+  m["p78"].near.push("p67", "p68", "p79", "p90", "p89", "p77");
+  m["p79"].near.push("p68", "p69", "p80", "p91", "p90", "p78");
+  m["p80"].near.push("p69", "p70", "p81", "p92", "p91", "p79");
+  m["p81"].near.push("p70", "p71", "p82", "p93", "p92", "p80");
+  m["p82"].near.push("p71", "p72", "p83", "p94", "p93", "p81");
+  m["p83"].near.push("p72", "p73", "p84", "p95", "p94", "p82");
+  m["p84"].near.push("p73", "p74", "p85", "p96", "p95", "p83");
+  m["p85"].near.push("p74", "p75", "p86", "p97", "p96", "p84");
+  m["p86"].near.push("p75", "p98", "p97", "p85");
+  m["p87"].near.push("p76", "p88", "p100", "p99");
+  m["p88"].near.push("p76", "p77", "p89", "p101", "p100", "p87");
+  m["p89"].near.push("p77", "p78", "p90", "p102", "p101", "p88");
+  m["p90"].near.push("p78", "p79", "p91", "p103", "p102", "p89");
+  m["p91"].near.push("p79", "p80", "p92", "p104", "p103", "p90");
+  m["p92"].near.push("p80", "p81", "p93", "p105", "p104", "p91");
+  m["p93"].near.push("p81", "p82", "p94", "p106", "p105", "p92");
+  m["p94"].near.push("p82", "p83", "p95", "p107", "p106", "p93");
+  m["p95"].near.push("p83", "p84", "p96", "p108", "p107", "p94");
+  m["p96"].near.push("p84", "p85", "p97", "p109", "p108", "p95");
+  m["p97"].near.push("p85", "p86", "p98", "p110", "p109", "p96");
+  m["p98"].near.push("p86", "p111", "p110", "p97");
+  m["p99"].near.push("p87", "p100");
+  m["p100"].near.push("p87", "p88", "p101", "p99");
+  m["p101"].near.push("p88", "p89", "p102", "p100");
+  m["p102"].near.push("p89", "p90", "p103", "p101");
+  m["p103"].near.push("p90", "p91", "p104", "p112", "p102");
+  m["p104"].near.push("p91", "p92", "p105", "p113", "p112", "p103");
+  m["p105"].near.push("p92", "p93", "p106", "p114", "p113", "p104");
+  m["p106"].near.push("p93", "p94", "p107", "p115", "p114", "p105");
+  m["p107"].near.push("p94", "p95", "p108", "p115", "p106");
+  m["p108"].near.push("p95", "p96", "p109", "p107");
+  m["p109"].near.push("p96", "p97", "p110", "p108");
+  m["p110"].near.push("p97", "p98", "p111", "p109");
+  m["p111"].near.push("p98", "p110");
+  m["p112"].near.push("p103", "p104", "p113", "p116");
+  m["p113"].near.push("p104", "p105", "p114", "p117", "p116", "p112");
+  m["p114"].near.push("p105", "p106", "p115", "p118", "p117", "p113");
+  m["p115"].near.push("p106", "p107", "p118", "p114");
+  m["p116"].near.push("p112", "p113", "p117", "p119");
+  m["p117"].near.push("p113", "p114", "p118", "p120", "p119", "p116");
+  m["p118"].near.push("p114", "p115", "p120", "p117");
+  m["p119"].near.push("p116", "p117", "p120", "p121");
+  m["p120"].near.push("p117", "p118", "p121", "p119");
+  m["p121"].near.push("p119", "p120");
   return board;
 };
