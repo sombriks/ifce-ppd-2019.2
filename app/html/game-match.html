@@ -53,7 +53,7 @@
         data: {
           game: null,
           myself: null,
-          m: new Set()
+          m:[]
         },
         created() {
           ipcRenderer.send("get-myself");
@@ -77,18 +77,18 @@
           },
           sel(p) {
             if (!this.canSel(p)) return;
-            if (this.m.size == 1 && !this.canMoveTo(p)) {
+            if (this.m.length == 1 && !this.canMoveTo(p)) {
               console.log("movimento ilegal");
               return;
             }
             p.glow = !p.glow;
             if (p.glow) {
-              this.m.add(p);
+              this.m.push(p);
             } else {
-              this.m.delete(p);
+              this.m.pop();
             }
             console.log(this.m);
-            if (this.m.size == 2) this.doMove();
+            if (this.m.length == 2) this.doMove();
           },
           canSel(p) {
             return true;
@@ -99,13 +99,13 @@
           doMove() {
             const move = {
               p: this.myself,
-              move: Array.from(this.m),
+              move: this.m,
               time: new Date().toJSON()
             };
             this.game.moves.push(move);
             ipcRenderer.send("send-game-move", this.game);
             this.m.forEach(e => (e.glow = false));
-            this.m = new Set();
+            this.m = [];
           },
           mkStyle(p) {
             const stl =
@@ -116,11 +116,23 @@
                 case "free":
                   fill = "#efdfef";
                   break;
+                case "p1":
+                  fill = "#ff0000";
+                  break;
+                case "p2":
+                  fill = "#0000ff";
+                  break;
               }
             } else {
               switch (p.state) {
                 case "free":
                   fill = "#e3dcec";
+                  break;
+                case "p1":
+                  fill = "#990000";
+                  break;
+                case "p2":
+                  fill = "#000099";
                   break;
               }
             }

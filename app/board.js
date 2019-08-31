@@ -28,7 +28,7 @@ const mkCell = (id, d) => ({
   style,
   near: [],
   glow: false,
-  state: "free"
+  state: "free" // p1 // p2 //
 });
 export const mkBoard = _ => {
   // monta a lista
@@ -884,5 +884,9 @@ export const mkBoard = _ => {
   m["p119"].near.push("p116", "p117", "p120", "p121");
   m["p120"].near.push("p117", "p118", "p121", "p119");
   m["p121"].near.push("p119", "p120");
+  let i = 0;
+  while (i++ < 10) m[`p${i}`].state = "p1";
+  i = 111;
+  while (i++ < 121) m[`p${i}`].state = "p2";
   return board;
 };

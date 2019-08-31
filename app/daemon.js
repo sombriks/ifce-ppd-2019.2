@@ -52,7 +52,6 @@ ipcMain.on("send-challenge", (e, challenge) => {
 
 ipcMain.on("accept-challenge", (e, challenge) => {
 	client.acceptChallenge(challenge).then(_ => {
-		console.log(client.myGame);
 		win.loadFile("app/html/game-match.html");
 	});
 });
@@ -67,6 +66,5 @@ ipcMain.on("get-my-game", e => {
 });
 
 ipcMain.on("send-game-move", (e, game) => {
-	console.log(game);
 	client.gameMove(game).then(_ => e.sender.send("game-move", client.myGame));
 });
