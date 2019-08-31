@@ -65,6 +65,6 @@ ipcMain.on("get-my-game", e => {
 	e.sender.send("my-game", client.myGame);
 });
 
-ipcMain.on("send-game-move", (e, game) => {
-	client.gameMove(game).then(_ => e.sender.send("game-move", client.myGame));
+ipcMain.on("send-game-move", (e, move) => {
+	client.gameMove(move).then(_ => { e.sender.send("game-move", client.myGame) });
 });

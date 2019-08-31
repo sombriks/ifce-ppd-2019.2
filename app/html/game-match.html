@@ -53,7 +53,7 @@
         data: {
           game: null,
           myself: null,
-          m:[]
+          m: []
         },
         created() {
           ipcRenderer.send("get-myself");
@@ -67,43 +67,58 @@
           ipcRenderer.on("game-move", (e, game) => {
             console.log("game move!");
             console.log(game);
+            this.game = game;
           });
         },
         methods: {
           isMyTurn() {
-            const [p1, p2] = this.game.challenge;
-            const p = game.turn % 2 == 0 ? p1 : p2;
+            const { p1, p2 } = this.game.challenge;
+            const p = this.game.turn % 2 == 0 ? p1 : p2;
             return p.id == this.myself.id;
           },
-          sel(p) {
-            if (!this.canSel(p)) return;
-            if (this.m.length == 1 && !this.canMoveTo(p)) {
-              console.log("movimento ilegal");
-              return;
-            }
-            p.glow = !p.glow;
-            if (p.glow) {
-              this.m.push(p);
-            } else {
-              this.m.pop();
-            }
-            console.log(this.m);
-            if (this.m.length == 2) this.doMove();
+          iAmP1() {
+            const { p1, p2 } = this.game.challenge;
+            return p1.id == this.myself.id;
           },
-          canSel(p) {
-            return true;
+          iAmP2() {
+            const { p1, p2 } = this.game.challenge;
+            return p2.id == this.myself.id;
           },
           canMoveTo(p) {
-            return true;
+            let isNear = false;
+            if (this.m[0]) {
+              this.m[0].near.map(id => {
+                // TODO implementar o salto
+                if (p.id == id && p.state == "free") isNear = true;
+              });
+            }
+            return isNear;
+          },
+          canSel(p) {
+            if (!this.m[0]) {
+              if (this.iAmP1() && p.state == "p1") return true;
+              if (this.iAmP2() && p.state == "p2") return true;
+            }
+            if (this.canMoveTo(p)) return true;
+            if (this.m[0] == p) return true;
+            return false;
+          },
+          sel(p) {
+            if (!this.isMyTurn()) return console.log("Não é meu turno");
+            if (!this.canSel(p)) return console.log("Casa fora de alcance");
+            p.glow = !p.glow;
+            if (p.glow) this.m.push(p);
+            else this.m.pop();
+            if (this.m.length == 2) this.doMove();
           },
           doMove() {
             const move = {
               p: this.myself,
-              move: this.m,
+              p1: this.m[0],
+              p2: this.m[1],
               time: new Date().toJSON()
             };
-            this.game.moves.push(move);
-            ipcRenderer.send("send-game-move", this.game);
+            ipcRenderer.send("send-game-move", move);
             this.m.forEach(e => (e.glow = false));
             this.m = [];
           },
