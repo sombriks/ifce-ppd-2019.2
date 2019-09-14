@@ -84,13 +84,34 @@
             const { p1, p2 } = this.game.challenge;
             return p2.id == this.myself.id;
           },
+          makeGrafo(m0) {
+            const board = this.game.board;
+            const paths = [];
+            const currents = [m0];
+            const visited = [];
+            console.log("juntando os visitáveis");
+            while (currents.length) {
+              let curr = currents.pop();
+              visited.push(curr);
+              curr.near.map(id => {
+                const b = board.find(e => e.id == id);
+                if (b.state == "free") {
+                  if (!paths.find(x => x == b)) paths.push(b);
+                } else {
+                  if (!currents.find(x => x == b) && !visited.find(x => x == b))
+                    currents.push(b);
+                }
+              });
+            }
+            return paths;
+          },
           canMoveTo(p) {
+            console.log("canMoveTo");
             let isNear = false;
             if (this.m[0]) {
-              this.m[0].near.map(id => {
-                // TODO implementar o salto
-                if (p.id == id && p.state == "free") isNear = true;
-              });
+              console.log("andando no grafo");
+              const grafo = this.makeGrafo(this.m[0]);
+              if (grafo.find(x => x == p)) isNear = true;
             }
             return isNear;
           },
@@ -99,8 +120,8 @@
               if (this.iAmP1() && p.state == "p1") return true;
               if (this.iAmP2() && p.state == "p2") return true;
             }
-            if (this.canMoveTo(p)) return true;
             if (this.m[0] == p) return true;
+            if (this.canMoveTo(p)) return true;
             return false;
           },
           sel(p) {
@@ -119,7 +140,7 @@
               time: new Date().toJSON()
             };
             ipcRenderer.send("send-game-move", move);
-            this.m.forEach(e => (e.glow = false));
+            this.game.board.forEach(e => (e.glow = false));
             this.m = [];
           },
           mkStyle(p) {
