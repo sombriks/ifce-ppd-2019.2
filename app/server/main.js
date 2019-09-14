@@ -13,10 +13,10 @@ export const startMeUp = _ => {
 				nodeIntegration: true,
 			},
 		});
-		daemon.init(ipcMain, win);
+		daemon.init(win);
 		win.setMenuBarVisibility(false);
 		// initial state
 		console.log("if you start me up i'll never stop, never stop");
-		win.loadFile("app/html/open-screen.html");
+		win.loadFile("app/client/open-screen.html");
 	});
 };

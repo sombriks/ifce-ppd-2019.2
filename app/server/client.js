@@ -46,7 +46,6 @@ export const declineChallenge = challenge => {
 };
 
 export const gameMove = async move => {
-  console.log(move);
   myGame.moves.push(move);
   myGame.board.map(p1 => myGame.board.map(p2 => {
     if (p1.id == move.p1.id && p2.id == move.p2.id) {

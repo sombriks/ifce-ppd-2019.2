@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Damas chinesas</title>
+    <script src="remote-log.js"></script>
     <script type="module">
       window.Vue = require("vue/dist/vue");
     </script>
@@ -66,7 +67,6 @@
           });
           ipcRenderer.on("game-move", (e, game) => {
             console.log("game move!");
-            console.log(game);
             this.game = game;
           });
         },
