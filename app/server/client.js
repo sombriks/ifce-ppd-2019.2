@@ -47,13 +47,28 @@ export const declineChallenge = challenge => {
 
 export const gameMove = async move => {
   myGame.moves.push(move);
-  myGame.board.map(p1 => myGame.board.map(p2 => {
-    if (p1.id == move.p1.id && p2.id == move.p2.id) {
-      let state = p1.state;
-      p1.state = p2.state;
-      p2.state = state;
-    }
-  }))
+  myGame.board.map(p1 =>
+    myGame.board.map(p2 => {
+      if (p1.id == move.p1.id && p2.id == move.p2.id) {
+        let state = p1.state;
+        p1.state = p2.state;
+        p2.state = state;
+      }
+    })
+  );
   myGame.turn++;
   return myGame;
+};
+
+export const gameOver = async game => {
+  let g = games.filter(e => e.id !== game.id);
+  games.length = 0;
+  games.push(...g);
+  delete myGame.challenge;
+  delete myGame.id;
+  delete myGame.status;
+  delete myGame.moves;
+  delete myGame.board;
+  delete myGame.turn;
+  return "ame ended";
 };

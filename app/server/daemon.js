@@ -72,3 +72,9 @@ ipcMain.on("send-game-move", (e, move) => {
     e.sender.send("game-move", client.myGame);
   });
 });
+
+ipcMain.on("send-game-over", (e, game) => {
+  client.gameOver(game).then(_=>{
+    win.loadFile("app/client/lobby-chat.html");
+  })
+})
