@@ -69,6 +69,9 @@
             console.log("game move!");
             this.game = game;
           });
+          ipcRenderer.on("game-over", (e, game, w1, w2) => {
+            alert(`game over! ${p1w ? "Player 1 wins!" : "Player 2 wins!"}`);
+          });
         },
         methods: {
           isMyTurn() {
@@ -142,9 +145,6 @@
             ipcRenderer.send("send-game-move", move);
             this.game.board.forEach(e => (e.glow = false));
             this.m = [];
-            if (this.gameOver()) {
-              ipcRenderer.send("send-game-over", this.game);
-            }
           },
           mkStyle(p) {
             const stl =
@@ -176,25 +176,6 @@
               }
             }
             return `fill:${fill};` + stl;
-          },
-          gameOver() {
-            return this.p1Win() || this.p2Win();
-          },
-          p1Win() {
-            const board = this.game.board;
-            let over = true;
-            for (let i = 110; i < 121; i++)
-              if (board[i].state != "p1") over = false;
-            if (over) alert("fim de jogo! P1 venceu!");
-            return over;
-          },
-          p2Win() {
-            const board = this.game.board;
-            let over = true;
-            for (let i = 0; i < 10; i++)
-              if (board[i].state != "p2") over = false;
-            if (over) alert("fim de jogo! P2 venceu!");
-            return over;
           }
         }
       });

@@ -69,12 +69,16 @@ ipcMain.on("get-my-game", e => {
 
 ipcMain.on("send-game-move", (e, move) => {
   client.gameMove(move).then(_ => {
-    e.sender.send("game-move", client.myGame);
+    const p1w = client.p1Win();
+    const p2w = client.p2Win();
+    if (p1w || p2w) {
+      e.sender.send("game-over", client.myGame, p1w, p2w);
+    } else e.sender.send("game-move", client.myGame);
   });
 });
 
 ipcMain.on("send-game-over", (e, game) => {
-  client.gameOver(game).then(_=>{
+  client.gameOver(game).then(_ => {
     win.loadFile("app/client/lobby-chat.html");
-  })
-})
+  });
+});

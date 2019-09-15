@@ -60,6 +60,20 @@ export const gameMove = async move => {
   return myGame;
 };
 
+const end = (p, j, k) => {
+  const board = myGame.board;
+  let over = true;
+  for (let i = j; i < k; i++) {
+    console.log(board[i])
+    if (board[i].state != p) over = false;
+  }
+  return over;
+};
+
+export const p1Win = _ => end("p2", 0, 10);
+
+export const p2Win = _ => end("p1", 111, 121);
+
 export const gameOver = async game => {
   let g = games.filter(e => e.id !== game.id);
   games.length = 0;
@@ -70,5 +84,5 @@ export const gameOver = async game => {
   delete myGame.moves;
   delete myGame.board;
   delete myGame.turn;
-  return "ame ended";
+  return "game ended";
 };
