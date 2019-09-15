@@ -6,13 +6,11 @@ let win;
 
 export const init = _win => (win = _win);
 
-ipcMain.on("join-host", (_, args) => {
+ipcMain.on("join-host", async (_, args) => {
   const { ip, mode, nickname } = args;
-  if (mode == "host")
-    host.start().then(_ => {
-      client.join({ ip, nickname });
-      win.loadFile("app/client/lobby-chat.html");
-    });
+  if (mode == "host") await host.start();
+  await client.join({ ip, nickname });
+  win.loadFile("app/client/lobby-chat.html");
 });
 
 ipcMain.on("remote-log", (e, ...args) => {
@@ -67,18 +65,13 @@ ipcMain.on("get-my-game", e => {
   e.sender.send("my-game", client.myGame);
 });
 
-ipcMain.on("send-game-move", (e, move) => {
-  client.gameMove(move).then(_ => {
-    const p1w = client.p1Win();
-    const p2w = client.p2Win();
-    if (p1w || p2w) {
-      e.sender.send("game-over", client.myGame, p1w, p2w);
-    } else e.sender.send("game-move", client.myGame);
-  });
-});
-
-ipcMain.on("send-game-over", (e, game) => {
-  client.gameOver(game).then(_ => {
+ipcMain.on("send-game-move", async (e, move) => {
+  await client.gameMove(move);
+  const p1w = client.p1Win();
+  const p2w = client.p2Win();
+  if (p1w || p2w) {
+    await client.gameOver();
+    e.sender.send("game-over", client.myGame, p1w, p2w);
     win.loadFile("app/client/lobby-chat.html");
-  });
+  } else e.sender.send("game-move", client.myGame);
 });

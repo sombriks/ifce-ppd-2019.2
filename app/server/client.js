@@ -1,4 +1,5 @@
 import { mkBoard } from "./board";
+import net from "net";
 
 export const myself = {};
 export const players = [];
@@ -6,12 +7,16 @@ export const messages = [];
 export const challenges = [];
 export const games = [];
 export const myGame = {};
+let client;
 
 export const join = async ({ ip, nickname }) => {
   myself.nickname = nickname;
   myself.id = nickname + "#" + new Date().getTime();
   myself.status = "idle";
   players.push(myself);
+  client = net.createConnection({ host: ip, port: 8421 }, sock => {
+    console.log(sock)
+  });
   return "done!";
 };
 
@@ -64,7 +69,7 @@ const end = (p, j, k) => {
   const board = myGame.board;
   let over = true;
   for (let i = j; i < k; i++) {
-    console.log(board[i])
+    console.log(board[i]);
     if (board[i].state != p) over = false;
   }
   return over;
