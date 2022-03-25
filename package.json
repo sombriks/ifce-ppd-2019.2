@@ -20,7 +20,7 @@
   "homepage": "https://github.com/sombriks/ifce-ppd-2019.2#readme",
   "devDependencies": {},
   "dependencies": {
-    "electron": "^6.0.2",
+    "electron": "^13.6.6",
     "esm": "^3.2.25",
     "nes.css": "^2.2.0",
     "vue": "^2.6.10"
